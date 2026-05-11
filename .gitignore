@@ -1,0 +1,10 @@
+# Never commit your credentials
+docker-compose.yml
+
+# Keep a safe template instead
+!docker-compose.example.yml
+
+node_modules/
+npm-debug.log
+.env
+.DS_Store
