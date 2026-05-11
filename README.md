@@ -6,6 +6,8 @@ Remove movies and TV shows from Radarr, Sonarr, qBittorrent, and disk — all at
 
 ![Cleanrr](https://img.shields.io/badge/version-1.0.0-e5484d?style=flat-square) ![Docker](https://img.shields.io/badge/docker-ready-0db7ed?style=flat-square&logo=docker&logoColor=white) ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
+![Cleanrr screenshot](screenshots/cleanrr.png)
+
 ---
 
 ## The problem
