@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cleanrr — Setup</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0f0f11; --surface: #18181c; --surface2: #202026;
+    --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.14);
+    --text: #e8e8ea; --muted: #888892;
+    --accent: #e5484d; --accent-bg: rgba(229,72,77,0.12);
+    --green: #46a758; --green-bg: rgba(70,167,88,0.12);
+    --orange: #f97316; --orange-bg: rgba(249,115,22,0.12);
+    --radius: 10px; --radius-sm: 6px;
+  }
+  [data-theme="light"] {
+    --bg: #f4f4f6; --surface: #ffffff; --surface2: #f0f0f3;
+    --border: rgba(0,0,0,0.08); --border2: rgba(0,0,0,0.15);
+    --text: #111114; --muted: #6b6b78;
+    --accent: #d03b3f; --accent-bg: rgba(208,59,63,0.08);
+    --green: #2d7d3a; --green-bg: rgba(45,125,58,0.08);
+    --orange: #c2570a; --orange-bg: rgba(194,87,10,0.08);
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; }
+  .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; }
+  .logo-mark { width: 40px; height: 40px; border-radius: 10px; background: #111114; display: flex; align-items: center; justify-content: center; }
+  .logo-mark svg { width: 24px; height: 24px; fill: none; stroke: white; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .logo-text { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; }
+  .logo-text span { color: var(--accent); }
+
+  /* Progress bar */
+  .progress-wrap { width: 100%; max-width: 520px; margin-bottom: 1.5rem; }
+  .progress-steps { display: flex; gap: 0; }
+  .step-dot { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; }
+  .step-dot::before { content: ''; position: absolute; top: 14px; left: -50%; right: 50%; height: 2px; background: var(--border2); z-index: 0; }
+  .step-dot:first-child::before { display: none; }
+  .step-dot.done::before { background: var(--green); }
+  .step-dot.active::before { background: var(--accent); }
+  .dot-circle { width: 28px; height: 28px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--muted); position: relative; z-index: 1; transition: all 0.2s; }
+  .step-dot.done .dot-circle { background: var(--green); border-color: var(--green); color: white; }
+  .step-dot.active .dot-circle { background: var(--accent); border-color: var(--accent); color: white; }
+  .dot-label { font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .step-dot.active .dot-label { color: var(--text); }
+
+  /* Card */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 2rem; width: 100%; max-width: 520px; box-shadow: 0 8px 40px rgba(0,0,0,0.2); }
+  .step-header { margin-bottom: 1.5rem; }
+  .step-header h2 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+  .step-header p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .optional-badge { display: inline-block; font-size: 10px; font-weight: 500; background: var(--surface2); border: 1px solid var(--border2); border-radius: 99px; padding: 1px 8px; color: var(--muted); vertical-align: middle; margin-left: 8px; }
+
+  /* Fields */
+  .field { margin-bottom: 1rem; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+  label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 5px; }
+  input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 9px 12px; font-size: 14px; outline: none; transition: border-color 0.15s; }
+  input:focus { border-color: var(--border2); }
+  input::placeholder { color: var(--muted); font-size: 13px; }
+  .hint { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+  /* Test connection */
+  .test-wrap { margin-bottom: 1.25rem; }
+  .btn-test { background: none; border: 1px solid var(--border2); color: var(--muted); border-radius: var(--radius-sm); padding: 8px 14px; font-size: 13px; cursor: pointer; transition: all 0.15s; }
+  .btn-test:hover { color: var(--text); border-color: var(--text); }
+  .test-result { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; margin-left: 10px; }
+  .test-result.ok  { color: var(--green); }
+  .test-result.err { color: var(--accent); }
+
+  /* Nav buttons */
+  .nav { display: flex; gap: 10px; margin-top: 1.5rem; }
+  .btn-back { flex: 0; background: none; border: 1px solid var(--border2); color: var(--muted); border-radius: var(--radius-sm); padding: 10px 18px; font-size: 14px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .btn-back:hover { color: var(--text); }
+  .btn-next { flex: 1; background: var(--accent); border: none; color: white; border-radius: var(--radius-sm); padding: 10px; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity 0.15s; }
+  .btn-next:hover { opacity: 0.85; }
+  .btn-next:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-skip { flex: 0; background: none; border: 1px solid var(--border2); color: var(--muted); border-radius: var(--radius-sm); padding: 10px 16px; font-size: 14px; cursor: pointer; white-space: nowrap; }
+
+  .error { background: var(--accent-bg); color: var(--accent); border: 1px solid rgba(229,72,77,0.3); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 13px; margin-top: 1rem; display: none; }
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .success-icon { font-size: 48px; text-align: center; margin-bottom: 1rem; }
+</style>
+</head>
+<body>
+<div class="logo">
+  <div class="logo-mark">
+    <svg viewBox="0 0 36 36"><path d="M10 14h16M13 14v-2h10v2M12 14l1.5 14h9l1.5-14"/><circle cx="26" cy="25" r="6" fill="#e5484d" stroke="none"/><path d="M23 25l2 2 4-4" stroke="white"/></svg>
+  </div>
+  <span class="logo-text">Clean<span>rr</span> Setup</span>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-steps" id="progress">
+    <div class="step-dot active" id="sdot-0"><div class="dot-circle">1</div><span class="dot-label">Account</span></div>
+    <div class="step-dot" id="sdot-1"><div class="dot-circle">2</div><span class="dot-label">Radarr</span></div>
+    <div class="step-dot" id="sdot-2"><div class="dot-circle">3</div><span class="dot-label">Sonarr</span></div>
+    <div class="step-dot" id="sdot-3"><div class="dot-circle">4</div><span class="dot-label">qBittorrent</span></div>
+    <div class="step-dot" id="sdot-4"><div class="dot-circle">5</div><span class="dot-label">Jellyfin</span></div>
+    <div class="step-dot" id="sdot-5"><div class="dot-circle">6</div><span class="dot-label">Plex</span></div>
+    <div class="step-dot" id="sdot-6"><div class="dot-circle">7</div><span class="dot-label">Seerr</span></div>
+    <div class="step-dot" id="sdot-7"><div class="dot-circle">8</div><span class="dot-label">Done</span></div>
+  </div>
+</div>
+
+<div class="card" id="card">
+  <!-- Steps rendered by JS -->
+</div>
+
+<script>
+  (function() {
+    const saved = localStorage.getItem('cleanrr-theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+    else if (window.matchMedia('(prefers-color-scheme: light)').matches) document.documentElement.setAttribute('data-theme', 'light');
+  })();
+
+  // Check if already set up
+  fetch('/api/setup/status').then(r => r.json()).then(d => {
+    if (d.setupComplete) window.location.href = '/';
+  });
+
+  let currentStep = 0;
+  const services = {};
+
+  const steps = [
+    {
+      id: 'account',
+      title: 'Create your account',
+      desc: 'This is the only account for Cleanrr. You will use these credentials to log in.',
+      render: () => `
+        <div class="field"><label>Username</label><input type="text" id="f-username" placeholder="admin" autocomplete="username" /></div>
+        <div class="field"><label>Password</label><input type="password" id="f-password" placeholder="At least 8 characters" autocomplete="new-password" /></div>
+        <div class="field"><label>Confirm password</label><input type="password" id="f-password2" placeholder="Repeat password" autocomplete="new-password" /></div>
+      `,
+      validate: () => {
+        const u = val('f-username'), p = val('f-password'), p2 = val('f-password2');
+        if (!u || u.length < 3) return 'Username must be at least 3 characters';
+        if (!p || p.length < 8) return 'Password must be at least 8 characters';
+        if (p !== p2) return 'Passwords do not match';
+        services._auth = { username: u, password: p };
+        return null;
+      }
+    },
+    {
+      id: 'radarr', title: 'Radarr', desc: 'Connect to Radarr to manage your movie library.',
+      render: () => serviceFields('radarr', 'http://your-server-ip:7878', 'API Key', 'Radarr → Settings → General → API Key'),
+      optional: true,
+    },
+    {
+      id: 'sonarr', title: 'Sonarr', desc: 'Connect to Sonarr to manage your TV show library.',
+      render: () => serviceFields('sonarr', 'http://your-server-ip:8989', 'API Key', 'Sonarr → Settings → General → API Key'),
+      optional: true,
+    },
+    {
+      id: 'qbit', title: 'qBittorrent', desc: 'Connect to qBittorrent to remove torrents when deleting media.',
+      render: () => `
+        <div class="field"><label>URL</label><input type="url" id="f-qbit-url" placeholder="http://your-server-ip:8080" /></div>
+        <div class="field-row">
+          <div><label>Username</label><input type="text" id="f-qbit-user" placeholder="admin" /></div>
+          <div><label>Password</label><input type="password" id="f-qbit-pass" placeholder="••••••••" /></div>
+        </div>
+        <p class="hint">Enable WebUI in qBittorrent: Tools → Web UI → enable</p>
+        <div class="test-wrap"><button class="btn-test" onclick="testConn('qbit')">Test connection</button><span class="test-result" id="test-qbit"></span></div>
+      `,
+      optional: true,
+    },
+    {
+      id: 'jellyfin', title: 'Jellyfin', desc: 'Used to show watched status. Cleanrr never modifies Jellyfin.',
+      render: () => serviceFields('jellyfin', 'http://your-server-ip:8096', 'API Key', 'Dashboard → Advanced → API Keys → +'),
+      optional: true,
+    },
+    {
+      id: 'plex', title: 'Plex', desc: 'Used to show watched status. Cleanrr never modifies Plex.',
+      render: () => `
+        <div class="field"><label>URL</label><input type="url" id="f-plex-url" placeholder="http://your-server-ip:32400" /></div>
+        <div class="field"><label>Token</label><input type="text" id="f-plex-token" placeholder="Your Plex token" /></div>
+        <p class="hint">Find your token: Plex Web → play any item → ··· → Get Info → View XML → look for X-Plex-Token= in the URL</p>
+        <div class="test-wrap"><button class="btn-test" onclick="testConn('plex')">Test connection</button><span class="test-result" id="test-plex"></span></div>
+      `,
+      optional: true,
+    },
+    {
+      id: 'seerr', title: 'Seerr', desc: 'Connect to Seerr to remove media requests when you delete something.',
+      render: () => serviceFields('seerr', 'http://your-server-ip:5055', 'API Key', 'Seerr → Settings → General → API Key'),
+      optional: true,
+    },
+    {
+      id: 'done', title: 'All set!', desc: '',
+      render: () => `<div class="success-icon">🎉</div><p style="text-align:center;color:var(--muted);font-size:14px;line-height:1.7">Cleanrr is configured and ready to use.<br>You will be redirected to the app now.</p>`,
+    }
+  ];
+
+  function serviceFields(svc, urlPlaceholder, keyLabel, keyHint) {
+    return `
+      <div class="field"><label>URL</label><input type="url" id="f-${svc}-url" placeholder="${urlPlaceholder}" /></div>
+      <div class="field"><label>${keyLabel}</label><input type="text" id="f-${svc}-key" placeholder="Paste your API key" /><p class="hint">${keyHint}</p></div>
+      <div class="test-wrap"><button class="btn-test" onclick="testConn('${svc}')">Test connection</button><span class="test-result" id="test-${svc}"></span></div>
+    `;
+  }
+
+  function val(id) { return (document.getElementById(id)?.value || '').trim(); }
+
+  function renderStep() {
+    const step = steps[currentStep];
+    // Update progress dots
+    steps.forEach((_, i) => {
+      const dot = document.getElementById('sdot-' + i);
+      dot.className = 'step-dot' + (i < currentStep ? ' done' : i === currentStep ? ' active' : '');
+      dot.querySelector('.dot-circle').textContent = i < currentStep ? '✓' : String(i + 1);
+    });
+
+    const isDone = step.id === 'done';
+    const isOptional = step.optional === true;
+
+    document.getElementById('card').innerHTML = `
+      <div class="step-header">
+        <h2>${step.title}${isOptional ? '<span class="optional-badge">Optional</span>' : ''}</h2>
+        ${step.desc ? `<p>${step.desc}</p>` : ''}
+      </div>
+      ${step.render()}
+      <div class="error" id="step-error"></div>
+      <div class="nav">
+        ${currentStep > 0 && !isDone ? `<button class="btn-back" onclick="goBack()">← Back</button>` : ''}
+        ${isDone ? '' : isOptional ? `<button class="btn-skip" onclick="skipStep()">Skip</button>` : ''}
+        ${isDone ? '' : `<button class="btn-next" id="btn-next" onclick="goNext()">${currentStep === steps.length - 2 ? 'Finish setup' : 'Continue →'}</button>`}
+      </div>
+    `;
+
+    // Restore saved values
+    const svc = step.id;
+    if (services[svc]) {
+      if (services[svc].url)   { const el = document.getElementById(`f-${svc}-url`);   if (el) el.value = services[svc].url; }
+      if (services[svc].key)   { const el = document.getElementById(`f-${svc}-key`);   if (el) el.value = services[svc].key; }
+      if (services[svc].user)  { const el = document.getElementById(`f-${svc}-user`);  if (el) el.value = services[svc].user; }
+      if (services[svc].pass)  { const el = document.getElementById(`f-${svc}-pass`);  if (el) el.value = services[svc].pass; }
+      if (services[svc].token) { const el = document.getElementById(`f-${svc}-token`); if (el) el.value = services[svc].token; }
+    }
+    if (services._auth) {
+      const u = document.getElementById('f-username'); if (u) u.value = services._auth.username || '';
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('step-error');
+    if (el) { el.textContent = msg; el.style.display = 'block'; }
+  }
+
+  function collectService(svc) {
+    const url = val(`f-${svc}-url`);
+    if (!url) return null;
+    if (svc === 'qbit') return { url, user: val('f-qbit-user'), pass: document.getElementById('f-qbit-pass')?.value || '' };
+    if (svc === 'plex') return { url, token: val('f-plex-token') };
+    return { url, key: val(`f-${svc}-key`) };
+  }
+
+  async function goNext() {
+    const step = steps[currentStep];
+    const btn = document.getElementById('btn-next');
+
+    // Validate account step
+    if (step.id === 'account') {
+      const err = step.validate();
+      if (err) { showError(err); return; }
+    }
+
+    // Collect service config
+    const svcIds = ['radarr','sonarr','qbit','jellyfin','plex','seerr'];
+    if (svcIds.includes(step.id)) {
+      const data = collectService(step.id);
+      if (data) services[step.id] = data;
+    }
+
+    // Last real step — save everything
+    if (currentStep === steps.length - 2) {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>Saving…';
+      const svcConfig = {};
+      svcIds.forEach(k => { if (services[k]) svcConfig[k] = services[k]; });
+      try {
+        const r = await fetch('/api/setup/complete', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: services._auth.username, password: services._auth.password, services: svcConfig })
+        });
+        const d = await r.json();
+        if (!d.ok) { showError(d.error || 'Setup failed'); btn.disabled = false; btn.textContent = 'Finish setup'; return; }
+        currentStep++;
+        renderStep();
+        setTimeout(() => window.location.href = '/', 2500);
+      } catch { showError('Request failed'); btn.disabled = false; btn.textContent = 'Finish setup'; }
+      return;
+    }
+
+    currentStep++;
+    renderStep();
+  }
+
+  function goBack() {
+    if (currentStep > 0) { currentStep--; renderStep(); }
+  }
+
+  function skipStep() {
+    const step = steps[currentStep];
+    delete services[step.id];
+    currentStep++;
+    renderStep();
+  }
+
+  async function testConn(svc) {
+    const resultEl = document.getElementById('test-' + svc);
+    resultEl.className = 'test-result';
+    resultEl.textContent = 'Testing…';
+    const data = collectService(svc);
+    if (!data || !data.url) { resultEl.className = 'test-result err'; resultEl.textContent = '✗ Enter a URL first'; return; }
+    try {
+      const r = await fetch('/api/setup/test', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ service: svc, ...data }) });
+      const d = await r.json();
+      resultEl.className = 'test-result ' + (d.ok ? 'ok' : 'err');
+      resultEl.textContent = d.ok ? '✓ ' + d.msg : '✗ ' + d.msg;
+    } catch { resultEl.className = 'test-result err'; resultEl.textContent = '✗ Request failed'; }
+  }
+
+  renderStep();
+</script>
+</body>
+</html>
