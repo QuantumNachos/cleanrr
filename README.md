@@ -9,14 +9,12 @@ Remove movies and TV shows from Radarr, Sonarr, qBittorrent, and disk — all at
 ---
 
 ![Cleanrr dashboard](screenshots/0.png)
-
 ![Cleanrr dashboard](screenshots/1.png)
+![Cleanrr dashboard](screenshots/2.png)
+![Cleanrr dashboard](screenshots/3.png)
+![Cleanrr dashboard](screenshots/4.png)
 
-![Cleanrr size breakdown](screenshots/2.png)
 
-![Cleanrr login](screenshots/3.png)
-
-![Cleanrr setup wizard](screenshots/4.png)
 
 ---
 
